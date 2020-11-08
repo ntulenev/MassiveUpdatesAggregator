@@ -76,7 +76,7 @@ namespace MassiveUpdatesAggregator
             using (await _guard.LockAsync(_ct).ConfigureAwait(false))
             {
                 if (_isRunning is false)
-                    throw new InvalidOperationException("Application is already in stopping state.");
+                    throw new InvalidOperationException("Aggregator is already in stopping state.");
                 _isRunning = false;
 
                 tasks = _scheduledWork.Select(x => x.Value).ToList();
