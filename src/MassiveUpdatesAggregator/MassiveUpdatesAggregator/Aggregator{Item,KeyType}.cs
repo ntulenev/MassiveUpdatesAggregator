@@ -9,8 +9,22 @@ using Nito.AsyncEx;
 
 namespace MassiveUpdatesAggregator
 {
+    /// <summary>
+    /// Class that aggregates items per Key.
+    /// </summary>
+    /// <typeparam name="Item">Type of the item.</typeparam>
+    /// <typeparam name="KeyType">Type of the item key.</typeparam>
     public class Aggregator<Item, KeyType> : IAsyncEnumerable<Item> where Item : IAggregatorItem<KeyType>
     {
+        /// <summary>
+        /// Creates aggregator
+        /// </summary>
+        /// <param name="initialSize">Approximate size of the number of keys.</param>
+        /// <param name="millisecondsDelay">Delay in milliseconds when gets aggregates data from items.</param>
+        /// <param name="strategy">Aggregation strategy <see cref="IAggregationStrategy"/>.</param>
+        /// <param name="ct">Cancellation token for async operations.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="strategy"/> is null.</exception>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="initialSize"/> or <paramref name="millisecondsDelay"/> is incorrect.</exception>
         public Aggregator(int initialSize, int millisecondsDelay, IAggregationStrategy<Item, KeyType> strategy, CancellationToken ct = default)
         {
             if (initialSize <= 0)
@@ -30,8 +44,15 @@ namespace MassiveUpdatesAggregator
             _strategy = strategy;
         }
 
+        /// <summary>
+        /// Checks when aggregator is activated
+        /// </summary>
         public bool IsRunning => _isRunning;
 
+        /// <summary>
+        /// Add <typeparamref name="Item"/> in aggregator.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">Thrown when <typeparamref name="Item"/> is null.</exception>
         public async Task SendAsync(Item item)
         {
             if (item == null)
@@ -58,6 +79,11 @@ namespace MassiveUpdatesAggregator
             }
         }
 
+        /// <summary>
+        /// Creates async iterator for aggregated items.
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns>Messages async iterator.</returns>
         public async IAsyncEnumerator<Item> GetAsyncEnumerator(CancellationToken cancellationToken = default)
         {
             while (await _channel.Reader.WaitToReadAsync(cancellationToken).ConfigureAwait(false))
@@ -69,6 +95,9 @@ namespace MassiveUpdatesAggregator
             }
         }
 
+        /// <summary>
+        /// Stop aggregator
+        /// </summary>
         public async Task StopAsync()
         {
             IEnumerable<Task> tasks;
