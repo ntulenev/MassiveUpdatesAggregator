@@ -1,11 +1,11 @@
-﻿using Nito.AsyncEx;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
+
+using Nito.AsyncEx;
 
 namespace MassiveUpdatesAggregator
 {
@@ -44,19 +44,15 @@ namespace MassiveUpdatesAggregator
                 if (_isRunning is false)
                     return;
 
-                LinkedList<Item> list;
-                if (_items.TryGetValue(key, out var aggregationList))
-                {
-                    aggregationList.AddLast(item);
-                    list = aggregationList;
-                }
-                else
+                if (!_items.TryGetValue(key, out LinkedList<Item> list))
                 {
                     list = new LinkedList<Item>();
                     _items.Add(key, list);
                     _scheduledWork.Add(key, Aggregation(key));
                 }
+
                 list.AddLast(item);
+
             }
         }
 
@@ -99,7 +95,6 @@ namespace MassiveUpdatesAggregator
 
                 _items.Remove(key);
                 _scheduledWork.Remove(key);
-
             }
         }
 
