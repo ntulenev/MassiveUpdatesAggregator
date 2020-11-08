@@ -122,15 +122,15 @@ namespace MassiveUpdatesAggregator
 
             using (await _guard.LockAsync(_ct).ConfigureAwait(false))
             {
-                _ = _items.TryGetValue(key, out list);
+                if (!_items.TryGetValue(key, out list))
+                {
+                    throw new InvalidOperationException($"List with data for key {key} not found");
+                }
 
                 _items.Remove(key);
                 _scheduledWork.Remove(key);
 
             }
-
-            if (list is null)
-                throw new InvalidOperationException($"List with data for key {key} not found");
 
             await _channel.Writer.WriteAsync(list, _ct).ConfigureAwait(false);
         }
