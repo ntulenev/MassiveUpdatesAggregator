@@ -89,15 +89,21 @@ namespace MassiveUpdatesAggregator
         {
             await Task.Delay(_delay, _ct).ConfigureAwait(false);
 
+            LinkedList<Item> list;
+
             using (await _guard.LockAsync(_ct).ConfigureAwait(false))
             {
-                _ = _items.TryGetValue(key, out var aggregationList);
-
-                await _channel.Writer.WriteAsync(aggregationList, _ct).ConfigureAwait(false);
+                _ = _items.TryGetValue(key, out list);
 
                 _items.Remove(key);
                 _scheduledWork.Remove(key);
+
             }
+
+            if (list is null)
+                throw new InvalidOperationException($"List with data for key {key} not found");
+
+            await _channel.Writer.WriteAsync(list, _ct).ConfigureAwait(false);
         }
 
         private readonly Dictionary<KeyType, Task> _scheduledWork;
