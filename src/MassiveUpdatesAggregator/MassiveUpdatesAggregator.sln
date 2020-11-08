@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassiveUpdatesAggregator", "MassiveUpdatesAggregator\MassiveUpdatesAggregator.csproj", "{376B06D2-1C30-4F2F-BF21-89DFD84F153F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MassiveUpdatesAggregator", "MassiveUpdatesAggregator\MassiveUpdatesAggregator.csproj", "{376B06D2-1C30-4F2F-BF21-89DFD84F153F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassiveUpdatesAggregator.Tests", "MassiveUpdatesAggregator.Tests\MassiveUpdatesAggregator.Tests.csproj", "{3E69D1CC-C35C-4A19-91EE-2FA8C85A627F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,7 +16,11 @@ Global
 		{376B06D2-1C30-4F2F-BF21-89DFD84F153F}.Debug|x64.ActiveCfg = Debug|x64
 		{376B06D2-1C30-4F2F-BF21-89DFD84F153F}.Debug|x64.Build.0 = Debug|x64
 		{376B06D2-1C30-4F2F-BF21-89DFD84F153F}.Release|x64.ActiveCfg = Release|x64
-		{376B06D2-1C30-4F2F-BF21-89DFD84F153F}.Release|x64.ActiveCfg = Release|x64
+		{376B06D2-1C30-4F2F-BF21-89DFD84F153F}.Release|x64.Build.0 = Release|x64
+		{3E69D1CC-C35C-4A19-91EE-2FA8C85A627F}.Debug|x64.ActiveCfg = Debug|x64
+		{3E69D1CC-C35C-4A19-91EE-2FA8C85A627F}.Debug|x64.Build.0 = Debug|x64
+		{3E69D1CC-C35C-4A19-91EE-2FA8C85A627F}.Release|x64.ActiveCfg = Release|x64
+		{3E69D1CC-C35C-4A19-91EE-2FA8C85A627F}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
