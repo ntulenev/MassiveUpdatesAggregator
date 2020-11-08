@@ -48,11 +48,13 @@ namespace MassiveUpdatesAggregator
                 {
                     list = new LinkedList<Item>();
                     _items.Add(key, list);
+                    list.AddLast(item);
                     _scheduledWork.Add(key, Aggregation(key));
                 }
-
-                list.AddLast(item);
-
+                else
+                {
+                    list.AddLast(item);
+                }
             }
         }
 
