@@ -9,9 +9,9 @@ using Nito.AsyncEx;
 
 namespace MassiveUpdatesAggregator
 {
-    public class MassiveUpdatesAggregator<Item, KeyType> : IAsyncEnumerable<Item> where Item : IAggregatorItem<KeyType>
+    public class Aggregator<Item, KeyType> : IAsyncEnumerable<Item> where Item : IAggregatorItem<KeyType>
     {
-        public MassiveUpdatesAggregator(int initialSize, int millisecondsDelay, IAggregationStrategy<Item, KeyType> strategy, CancellationToken ct = default)
+        public Aggregator(int initialSize, int millisecondsDelay, IAggregationStrategy<Item, KeyType> strategy, CancellationToken ct = default)
         {
             if (initialSize <= 0)
                 throw new ArgumentException("initialSize should be more than zero.", nameof(initialSize));
