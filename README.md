@@ -1,5 +1,5 @@
 # MassiveUpdatesAggregator
-A component that allowsе to process a huge number of updates for different entities (differing by the key) and returns an aggregated version of each of them by timer
+Allowsе to process a huge number of updates for different entities (of one type tat could be grouped by the key) and returns an aggregated version of each of them by timer.
 
 ![Diagram](giagram.PNG)
 
@@ -41,7 +41,7 @@ class Program
         var rnd = new Random();
 
         // Creation of the aggregator class
-        var mua = new MassiveUpdatesAggregator<TestData, int>(100, 1000, new SumStrategy(), cts.Token);
+        var aggregator = new Aggregator<TestData, int>(100, 1000, new SumStrategy(), cts.Token);
 
         bool isWork = true;
         int i = 0;
@@ -52,7 +52,7 @@ class Program
             {
                 await Task.Delay(100 * rnd.Next(1, 7));
                 // Send data for key = 1  
-                await mua.SendAsync(new TestData { Key = 1, Value = testData[i++] });
+                await aggregator.SendAsync(new TestData { Key = 1, Value = testData[i++] });
                 if (i == testData.Length)
                     i = 0;
             }
@@ -61,7 +61,7 @@ class Program
         _ = Task.Run(async () =>
         {
             // Iterate aggregated items
-            await foreach (var item in mua.WithCancellation(cts.Token))
+            await foreach (var item in aggregator.WithCancellation(cts.Token))
             {
                 Console.WriteLine($"{item.Key} {item.Value}");
             }
@@ -73,7 +73,7 @@ class Program
         try
         {
             // Stop aggregator
-            await mua.StopAsync();
+            await aggregator.StopAsync();
         }
         catch (TaskCanceledException)
         {
