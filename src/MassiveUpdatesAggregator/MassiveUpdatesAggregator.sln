@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30523.141
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassiveUpdatesAggregator", "MassiveUpdatesAggregator\MassiveUpdatesAggregator.csproj", "{376B06D2-1C30-4F2F-BF21-89DFD84F153F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{376B06D2-1C30-4F2F-BF21-89DFD84F153F}.Debug|x64.ActiveCfg = Debug|x64
+		{376B06D2-1C30-4F2F-BF21-89DFD84F153F}.Debug|x64.Build.0 = Debug|x64
+		{376B06D2-1C30-4F2F-BF21-89DFD84F153F}.Release|x64.ActiveCfg = Release|x64
+		{376B06D2-1C30-4F2F-BF21-89DFD84F153F}.Release|x64.ActiveCfg = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6B2ED231-CE71-48A2-8E0C-A34DEE584615}
+	EndGlobalSection
+EndGlobal
