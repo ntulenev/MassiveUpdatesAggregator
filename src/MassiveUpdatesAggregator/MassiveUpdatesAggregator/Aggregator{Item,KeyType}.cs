@@ -15,6 +15,7 @@ namespace MassiveUpdatesAggregator
     /// <typeparam name="Item">Type of the item.</typeparam>
     /// <typeparam name="KeyType">Type of the item key.</typeparam>
     public class Aggregator<Item, KeyType> : IAsyncEnumerable<Item> where Item : IAggregatorItem<KeyType>
+                                                                    where KeyType : notnull
     {
         /// <summary>
         /// Creates aggregator
@@ -65,7 +66,7 @@ namespace MassiveUpdatesAggregator
                 if (_isRunning is false)
                     return;
 
-                if (!_items.TryGetValue(key, out LinkedList<Item> list))
+                if (!_items.TryGetValue(key, out LinkedList<Item>? list))
                 {
                     list = new LinkedList<Item>();
                     _items.Add(key, list);
@@ -88,7 +89,7 @@ namespace MassiveUpdatesAggregator
         {
             while (await _channel.Reader.WaitToReadAsync(cancellationToken).ConfigureAwait(false))
             {
-                while (_channel.Reader.TryRead(out IEnumerable<Item> items))
+                while (_channel.Reader.TryRead(out IEnumerable<Item>? items))
                 {
                     yield return _strategy.Merge(items);
                 }
@@ -118,7 +119,7 @@ namespace MassiveUpdatesAggregator
         {
             await Task.Delay(_delay, _ct).ConfigureAwait(false);
 
-            LinkedList<Item> list;
+            LinkedList<Item>? list;
 
             using (await _guard.LockAsync(_ct).ConfigureAwait(false))
             {
