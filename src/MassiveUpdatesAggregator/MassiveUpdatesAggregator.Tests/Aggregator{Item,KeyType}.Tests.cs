@@ -137,5 +137,24 @@ namespace MassiveUpdatesAggregator.Tests
             // Assert
             exception.Should().BeNull();
         }
+
+        [Fact(DisplayName = "Aggregator does not get message before delay.")]
+        [Trait("Category", "Unit")]
+        public async Task AggregatorDoesNotGetMessageBeforeDelay()
+        {
+            // Arrange
+            var strategy = (new Mock<IAggregationStrategy<TestItem, object>>()).Object;
+            var size = 1;
+            var delay = 1000;
+            var aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None);
+            TestItem item = new TestItem();
+            await aggregator.SendAsync(item);
+
+            // Act
+            var isItemReadyTask = aggregator.GetAsyncEnumerator().MoveNextAsync();
+
+            // Assert
+            isItemReadyTask.IsCompleted.Should().BeFalse();
+        }
     }
 }
