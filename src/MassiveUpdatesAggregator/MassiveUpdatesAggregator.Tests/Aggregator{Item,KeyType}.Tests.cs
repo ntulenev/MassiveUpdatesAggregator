@@ -1,6 +1,9 @@
 ﻿using FluentAssertions;
 using Moq;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -155,6 +158,37 @@ namespace MassiveUpdatesAggregator.Tests
 
             // Assert
             isItemReadyTask.IsCompleted.Should().BeFalse();
+        }
+
+        [Fact(DisplayName = "Aggregator gets message after delay.")]
+        [Trait("Category", "Unit")]
+        public async Task AggregatorGetsMessageAfterDelay()
+        {
+            var item = new TestItem();
+            var resultItem = new TestItem();
+
+            // Arrange
+            var aggregatorMock = (new Mock<IAggregationStrategy<TestItem, object>>());
+            var strategy = aggregatorMock.Object;
+
+            aggregatorMock.Setup(x => x.Merge(It.Is<IEnumerable<TestItem>>(coll => coll.Single() == item))).Returns(resultItem);
+
+            var size = 1;
+            var delay = 1000;
+            var aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None);
+
+            await aggregator.SendAsync(item);
+
+            // Act
+            var enumerator = aggregator.GetAsyncEnumerator();
+            var isItemReadyTask = enumerator.MoveNextAsync();
+
+            // Assert
+            await Task.Delay(2000).ConfigureAwait(false); //Attemts to wait aggregator timeout
+            isItemReadyTask.IsCompleted.Should().BeTrue();
+            var res = await isItemReadyTask;
+            res.Should().BeTrue();
+            enumerator.Current.Should().Be(resultItem);
         }
     }
 }
