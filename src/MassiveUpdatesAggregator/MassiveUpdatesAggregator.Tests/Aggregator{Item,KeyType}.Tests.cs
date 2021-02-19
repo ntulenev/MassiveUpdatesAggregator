@@ -190,5 +190,74 @@ namespace MassiveUpdatesAggregator.Tests
             res.Should().BeTrue();
             enumerator.Current.Should().Be(resultItem);
         }
+
+        [Fact(DisplayName = "Aggregator with 2 messages gets message after delay.")]
+        [Trait("Category", "Unit")]
+        public async Task AggregatorWith2MsgsGetsMessageAfterDelay()
+        {
+            var item1 = new TestItem();
+            var item2 = new TestItem();
+            var resultItem = new TestItem();
+
+            // Arrange
+            var aggregatorMock = (new Mock<IAggregationStrategy<TestItem, object>>());
+            var strategy = aggregatorMock.Object;
+
+            aggregatorMock.Setup(x => x.Merge(It.Is<IEnumerable<TestItem>>(coll => coll.Count() == 2 && coll.First() == item1 && coll.Last() == item2))).Returns(resultItem);
+
+            var size = 1;
+            var delay = 1000;
+            var aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None);
+
+            await aggregator.SendAsync(item1);
+            await Task.Delay(100).ConfigureAwait(false); //Attemts to emulate some delay between messages less then aggregator delay
+            await aggregator.SendAsync(item2);
+
+
+            // Act
+            var enumerator = aggregator.GetAsyncEnumerator();
+            var isItemReadyTask = enumerator.MoveNextAsync();
+
+            // Assert
+            await Task.Delay(2000).ConfigureAwait(false); //Attemts to wait aggregator timeout
+            isItemReadyTask.IsCompleted.Should().BeTrue();
+            var res = await isItemReadyTask;
+            res.Should().BeTrue();
+            enumerator.Current.Should().Be(resultItem);
+        }
+
+        [Fact(DisplayName = "Aggregator with 2 messages and timeout gets message after delay.")]
+        [Trait("Category", "Unit")]
+        public async Task AggregatorWith2MsgsAndTimeoutGetsMessageAfterDelay()
+        {
+            var item1 = new TestItem();
+            var item2 = new TestItem();
+            var resultItem = new TestItem();
+
+            // Arrange
+            var aggregatorMock = (new Mock<IAggregationStrategy<TestItem, object>>());
+            var strategy = aggregatorMock.Object;
+
+            aggregatorMock.Setup(x => x.Merge(It.Is<IEnumerable<TestItem>>(coll => coll.Single() == item1))).Returns(resultItem);
+
+            var size = 1;
+            var delay = 1000;
+            var aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None);
+
+            await aggregator.SendAsync(item1);
+            await Task.Delay(2000).ConfigureAwait(false); //Attemts to emulate long delay between messages more then aggregator delay
+            await aggregator.SendAsync(item2);
+
+
+            // Act
+            var enumerator = aggregator.GetAsyncEnumerator();
+            var isItemReadyTask = enumerator.MoveNextAsync();
+
+            // Assert
+            isItemReadyTask.IsCompleted.Should().BeTrue();
+            var res = await isItemReadyTask;
+            res.Should().BeTrue();
+            enumerator.Current.Should().Be(resultItem);
+        }
     }
 }
