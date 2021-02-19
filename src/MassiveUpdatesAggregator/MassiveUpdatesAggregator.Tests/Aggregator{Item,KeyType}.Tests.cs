@@ -64,5 +64,23 @@ namespace MassiveUpdatesAggregator.Tests
             // Assert
             exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
         }
+
+        [Fact(DisplayName = "Aggregator is running after created.")]
+        [Trait("Category", "Unit")]
+        public void AggregatorIsRunningAfterCreated()
+        {
+            // Arrange
+            var strategy = (new Mock<IAggregationStrategy<TestItem, object>>()).Object;
+            var size = 5;
+            var delay = 1000;
+            Aggregator<TestItem, object> aggregator = null!;
+
+            // Act
+            var exception = Record.Exception(() => aggregator =  new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None));
+
+            // Assert
+            exception.Should().BeNull();
+            aggregator.IsRunning.Should().BeTrue();
+        }
     }
 }
