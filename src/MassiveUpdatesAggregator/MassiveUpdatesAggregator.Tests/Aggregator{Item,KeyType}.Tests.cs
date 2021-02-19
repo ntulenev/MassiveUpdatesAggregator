@@ -120,7 +120,7 @@ namespace MassiveUpdatesAggregator.Tests
             exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
         }
 
-        [Fact(DisplayName = "Aggregator could send message if buffer is not full.")]
+        [Fact(DisplayName = "Aggregator could send message.")]
         [Trait("Category", "Unit")]
         public async Task MessageCouldBeSended()
         {
