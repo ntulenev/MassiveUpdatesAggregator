@@ -101,5 +101,23 @@ namespace MassiveUpdatesAggregator.Tests
             exception.Should().BeNull();
             aggregator.IsRunning.Should().BeFalse();
         }
+
+        [Fact(DisplayName = "Aggregator could not accept null message.")]
+        [Trait("Category", "Unit")]
+        public async Task MessageCouldNotBeSendIfNull()
+        {
+            // Arrange
+            var strategy = (new Mock<IAggregationStrategy<TestItem, object>>()).Object;
+            var size = 5;
+            var delay = 1000;
+            var aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None);
+            TestItem item = null!;
+
+            // Act
+            var exception = await Record.ExceptionAsync(async () => await aggregator.SendAsync(item));
+
+            // Assert
+            exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
+        }
     }
 }
