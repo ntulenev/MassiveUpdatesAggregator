@@ -9,7 +9,7 @@ namespace MassiveUpdatesAggregator.Tests
 {
     public class TestItem : IAggregatorItem<object>
     {
-        public object Key => throw new System.NotImplementedException();
+        public object Key => string.Empty;
     }
 
     public class AggregatorTests
@@ -118,6 +118,24 @@ namespace MassiveUpdatesAggregator.Tests
 
             // Assert
             exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
+        }
+
+        [Fact(DisplayName = "Aggregator could send message if buffer is not full.")]
+        [Trait("Category", "Unit")]
+        public async Task MessageCouldBeSended()
+        {
+            // Arrange
+            var strategy = (new Mock<IAggregationStrategy<TestItem, object>>()).Object;
+            var size = 1;
+            var delay = 1000;
+            var aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None);
+            TestItem item = new TestItem();
+
+            // Act
+            var exception = await Record.ExceptionAsync(async () => await aggregator.SendAsync(item));
+
+            // Assert
+            exception.Should().BeNull();
         }
     }
 }
