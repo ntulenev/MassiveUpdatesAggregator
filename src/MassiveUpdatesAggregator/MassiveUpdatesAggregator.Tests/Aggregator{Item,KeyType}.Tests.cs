@@ -2,6 +2,7 @@
 using Moq;
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace MassiveUpdatesAggregator.Tests
@@ -76,11 +77,29 @@ namespace MassiveUpdatesAggregator.Tests
             Aggregator<TestItem, object> aggregator = null!;
 
             // Act
-            var exception = Record.Exception(() => aggregator =  new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None));
+            var exception = Record.Exception(() => aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None));
 
             // Assert
             exception.Should().BeNull();
             aggregator.IsRunning.Should().BeTrue();
+        }
+
+        [Fact(DisplayName = "Aggregator is not running after stop.")]
+        [Trait("Category", "Unit")]
+        public async Task AggregatorNotIsRunningAfterStoppedAsync()
+        {
+            // Arrange
+            var strategy = (new Mock<IAggregationStrategy<TestItem, object>>()).Object;
+            var size = 5;
+            var delay = 1000;
+            var aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None);
+
+            // Act
+            var exception = await Record.ExceptionAsync(async () => await aggregator.StopAsync().ConfigureAwait(false));
+
+            // Assert
+            exception.Should().BeNull();
+            aggregator.IsRunning.Should().BeFalse();
         }
     }
 }
