@@ -105,6 +105,24 @@ namespace MassiveUpdatesAggregator.Tests
             aggregator.IsRunning.Should().BeFalse();
         }
 
+        [Fact(DisplayName = "Aggregator cant be stopped twice.")]
+        [Trait("Category", "Unit")]
+        public async Task AggregatorErrorOnDoubleStop()
+        {
+            // Arrange
+            var strategy = (new Mock<IAggregationStrategy<TestItem, object>>()).Object;
+            var size = 5;
+            var delay = 1000;
+            var aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None);
+            await aggregator.StopAsync().ConfigureAwait(false);
+
+            // Act
+            var exception = await Record.ExceptionAsync(async () => await aggregator.StopAsync().ConfigureAwait(false));
+
+            // Assert
+            exception.Should().NotBeNull().And.BeOfType<InvalidOperationException>();
+        }
+
         [Fact(DisplayName = "Aggregator could not accept null message.")]
         [Trait("Category", "Unit")]
         public async Task MessageCouldNotBeSendIfNull()
@@ -213,7 +231,6 @@ namespace MassiveUpdatesAggregator.Tests
             await Task.Delay(100).ConfigureAwait(false); //Attemts to emulate some delay between messages less then aggregator delay
             await aggregator.SendAsync(item2);
 
-
             // Act
             var enumerator = aggregator.GetAsyncEnumerator();
             var isItemReadyTask = enumerator.MoveNextAsync();
@@ -247,7 +264,6 @@ namespace MassiveUpdatesAggregator.Tests
             await aggregator.SendAsync(item1);
             await Task.Delay(2000).ConfigureAwait(false); //Attemts to emulate long delay between messages more then aggregator delay
             await aggregator.SendAsync(item2);
-
 
             // Act
             var enumerator = aggregator.GetAsyncEnumerator();
