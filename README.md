@@ -1,5 +1,5 @@
 # MassiveUpdatesAggregator
-Allowsе to group incoming messages by key and returns aggregations by timer.
+Allowsеs to group incoming messages by key and returns aggregations by timer.
 
 ![Diagram](diagram.PNG)
 
