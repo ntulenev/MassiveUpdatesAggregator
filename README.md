@@ -1,5 +1,5 @@
 # MassiveUpdatesAggregator
-Allowsе to process a huge number of updates for different entities (of one type that could be grouped by the key) and returns an aggregated version of each of them by timer.
+Allowsе to group incoming messages by key and returns aggregations by timer.
 
 ![Diagram](diagram.PNG)
 
