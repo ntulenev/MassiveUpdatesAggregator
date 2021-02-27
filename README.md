@@ -6,13 +6,7 @@ Allowsе to process a huge number of updates for different entities (of one type
 ### Example
 
 ```C#
-
-public class TestData : IAggregatorItem<int>
-{
-    public int Key { get; set; }
-
-    public string Value { get; set; }
-}
+public record TestData(int Key, string Value) : IAggregatorItem<int>;
 
 /// <summary>
 /// This class implements aggregation strategy for bunch of data
@@ -23,11 +17,7 @@ public class SumStrategy : IAggregationStrategy<TestData, int>
     {
         // Simple strategy - just create new item with key and contact of all values
         var key = items.First().Key;
-        return new TestData
-        {
-            Key = key,
-            Value = string.Join("-", items.Select(x => x.Value))
-        };
+        return new TestData(Key: key, Value: string.Join("-", items.Select(x => x.Value)));
     }
 }
 
@@ -41,7 +31,7 @@ class Program
         var rnd = new Random();
 
         // Creation of the aggregator class
-        var aggregator = new Aggregator<TestData, int>(100, 1000, new SumStrategy(), cts.Token);
+        var aggregator = new Aggregator<TestData, int>(initialSize: 100, millisecondsDelay: 1000, new SumStrategy(), cts.Token);
 
         bool isWork = true;
         int i = 0;
@@ -52,7 +42,7 @@ class Program
             {
                 await Task.Delay(100 * rnd.Next(1, 7));
                 // Send data for key = 1  
-                await aggregator.SendAsync(new TestData { Key = 1, Value = testData[i++] });
+                await aggregator.SendAsync(new TestData(Key: 1, Value: testData[i++]));
                 if (i == testData.Length)
                     i = 0;
             }
@@ -83,8 +73,6 @@ class Program
         Console.WriteLine("All done");
     }
 }
-
-
 ```
 #### output 
 
