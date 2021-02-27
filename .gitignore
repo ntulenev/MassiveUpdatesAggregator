@@ -3,3 +3,6 @@
 /src/MassiveUpdatesAggregator/MassiveUpdatesAggregator/bin
 /src/MassiveUpdatesAggregator/MassiveUpdatesAggregator.Tests/obj
 /src/MassiveUpdatesAggregator/MassiveUpdatesAggregator.Tests/bin
+/src/MassiveUpdatesAggregator/TestApp/obj
+/src/MassiveUpdatesAggregator/TestApp/.vs
+/src/MassiveUpdatesAggregator/TestApp/bin

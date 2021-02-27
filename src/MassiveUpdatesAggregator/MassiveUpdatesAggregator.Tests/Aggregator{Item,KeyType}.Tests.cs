@@ -11,14 +11,8 @@ using Xunit;
 
 namespace MassiveUpdatesAggregator.Tests
 {
-    public class TestItem : IAggregatorItem<object>
-    {
-        public object Key => string.Empty;
-    }
-
     public class AggregatorTests
     {
-
         [Theory(DisplayName = "Aggregator can't be created with wrong size.")]
         [InlineData(0)]
         [InlineData(-1)]

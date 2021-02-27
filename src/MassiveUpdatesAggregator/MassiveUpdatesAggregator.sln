@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MassiveUpdatesAggregator", "MassiveUpdatesAggregator\MassiveUpdatesAggregator.csproj", "{376B06D2-1C30-4F2F-BF21-89DFD84F153F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassiveUpdatesAggregator.Tests", "MassiveUpdatesAggregator.Tests\MassiveUpdatesAggregator.Tests.csproj", "{3E69D1CC-C35C-4A19-91EE-2FA8C85A627F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MassiveUpdatesAggregator.Tests", "MassiveUpdatesAggregator.Tests\MassiveUpdatesAggregator.Tests.csproj", "{3E69D1CC-C35C-4A19-91EE-2FA8C85A627F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "TestApp\TestApp.csproj", "{56124DF1-1438-4216-9EB8-619D456833EE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{3E69D1CC-C35C-4A19-91EE-2FA8C85A627F}.Debug|x64.Build.0 = Debug|x64
 		{3E69D1CC-C35C-4A19-91EE-2FA8C85A627F}.Release|x64.ActiveCfg = Release|x64
 		{3E69D1CC-C35C-4A19-91EE-2FA8C85A627F}.Release|x64.Build.0 = Release|x64
+		{56124DF1-1438-4216-9EB8-619D456833EE}.Debug|x64.ActiveCfg = Debug|x64
+		{56124DF1-1438-4216-9EB8-619D456833EE}.Debug|x64.Build.0 = Debug|x64
+		{56124DF1-1438-4216-9EB8-619D456833EE}.Release|x64.ActiveCfg = Release|x64
+		{56124DF1-1438-4216-9EB8-619D456833EE}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
