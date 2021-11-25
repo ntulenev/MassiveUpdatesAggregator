@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace MassiveUpdatesAggregator
+﻿namespace MassiveUpdatesAggregator
 {
     /// <summary>
     /// Interface that presents logic for aggregation strategy.
