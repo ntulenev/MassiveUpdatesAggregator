@@ -1,7 +1,6 @@
-﻿namespace MassiveUpdatesAggregator.Tests
+﻿namespace MassiveUpdatesAggregator.Tests;
+
+public record TestItem : IAggregatorItem<object>
 {
-    public record TestItem : IAggregatorItem<object>
-    {
-        public object Key => string.Empty;
-    }
+    public object Key => string.Empty;
 }
