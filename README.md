@@ -15,6 +15,8 @@ public class SumStrategy : IAggregationStrategy<TestData, int>
 {
     public TestData Merge(IEnumerable<TestData> items)
     {
+        ArgumentNullException.ThrowIfNull(items);
+
         // Simple strategy - just create new item with key and contact of all values
         var key = items.First().Key;
         return new TestData(Key: key, Value: string.Join("-", items.Select(x => x.Value)));
@@ -27,13 +29,15 @@ class Program
     {
         var testData = "The quick brown fox jumps over the lazy dog".Split(" ");
 
-        CancellationTokenSource cts = new CancellationTokenSource();
+        using var cts = new CancellationTokenSource();
+
         var rnd = new Random();
 
         // Creation of the aggregator class
         var aggregator = new Aggregator<TestData, int>(initialSize: 100, millisecondsDelay: 1000, new SumStrategy(), cts.Token);
 
         bool isWork = true;
+
         int i = 0;
 
         _ = Task.Run(async () =>
@@ -41,10 +45,14 @@ class Program
             while (isWork)
             {
                 await Task.Delay(100 * rnd.Next(1, 7));
+
                 // Send data for key = 1  
                 await aggregator.SendAsync(new TestData(Key: 1, Value: testData[i++]));
+
                 if (i == testData.Length)
+                {
                     i = 0;
+                }
             }
         });
 
@@ -70,7 +78,7 @@ class Program
 
         }
 
-        Console.WriteLine("All done");
+        Console.WriteLine("All done.");
     }
 }
 ```
