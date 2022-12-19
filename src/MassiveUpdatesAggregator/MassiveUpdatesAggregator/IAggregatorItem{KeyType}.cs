@@ -5,5 +5,8 @@
 /// </summary>
 public interface IAggregatorItem<KeyType>
 {
+    /// <summary>
+    /// Aggregation key.
+    /// </summary>
     public KeyType Key { get; }
 }

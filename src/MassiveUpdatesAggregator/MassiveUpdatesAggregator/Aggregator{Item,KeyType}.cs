@@ -24,18 +24,21 @@ public class Aggregator<Item, KeyType> : IAsyncEnumerable<Item> where Item : IAg
     public Aggregator(int initialSize, int millisecondsDelay, IAggregationStrategy<Item, KeyType> strategy, CancellationToken ct = default)
     {
         if (initialSize <= 0)
-            throw new ArgumentException("initialSize should be more than zero.", nameof(initialSize));
+        {
+            throw new ArgumentException("InitialSize should be more than zero.", nameof(initialSize));
+        }
 
         if (millisecondsDelay <= 0)
-            throw new ArgumentException("delay can not be negative.", nameof(millisecondsDelay));
+        {
+            throw new ArgumentException("Delay can not be negative.", nameof(millisecondsDelay));
+        }
 
-        if (strategy is null)
-            throw new ArgumentNullException(nameof(strategy));
+        ArgumentNullException.ThrowIfNull(strategy);
 
         _items = new Dictionary<KeyType, LinkedList<Item>>(initialSize);
         _scheduledWork = new Dictionary<KeyType, Task>(initialSize);
         _ct = ct;
-        _delay = millisecondsDelay;
+        _delay = TimeSpan.FromMilliseconds(millisecondsDelay);
         _channel = Channel.CreateUnbounded<IEnumerable<Item>>();
         _strategy = strategy;
     }
@@ -51,8 +54,7 @@ public class Aggregator<Item, KeyType> : IAsyncEnumerable<Item> where Item : IAg
     /// <exception cref="ArgumentNullException">Thrown when <typeparamref name="Item"/> is null.</exception>
     public async Task SendAsync(Item item)
     {
-        if (item == null)
-            throw new ArgumentNullException(nameof(item));
+        ArgumentNullException.ThrowIfNull(item);
 
         var key = item.Key;
 
@@ -92,7 +94,7 @@ public class Aggregator<Item, KeyType> : IAsyncEnumerable<Item> where Item : IAg
     }
 
     /// <summary>
-    /// Stop aggregator
+    /// Stops aggregator.
     /// </summary>
     public async Task StopAsync()
     {
@@ -101,7 +103,10 @@ public class Aggregator<Item, KeyType> : IAsyncEnumerable<Item> where Item : IAg
         using (await _guard.LockAsync(_ct).ConfigureAwait(false))
         {
             if (_isRunning is false)
+            {
                 throw new InvalidOperationException("Aggregator is already in stopping state.");
+            }
+
             _isRunning = false;
 
             tasks = _scheduledWork.Select(x => x.Value).ToList();
@@ -135,7 +140,7 @@ public class Aggregator<Item, KeyType> : IAsyncEnumerable<Item> where Item : IAg
 
     private readonly Dictionary<KeyType, LinkedList<Item>> _items;
 
-    private readonly AsyncLock _guard = new AsyncLock();
+    private readonly AsyncLock _guard = new();
 
     private readonly CancellationToken _ct;
 
@@ -145,5 +150,5 @@ public class Aggregator<Item, KeyType> : IAsyncEnumerable<Item> where Item : IAg
 
     private volatile bool _isRunning = true;
 
-    private readonly int _delay;
+    private readonly TimeSpan _delay;
 }

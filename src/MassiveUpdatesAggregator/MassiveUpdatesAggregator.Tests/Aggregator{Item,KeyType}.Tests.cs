@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+
 using Moq;
 
 using Xunit;
@@ -139,7 +140,7 @@ public class AggregatorTests
         var size = 1;
         var delay = 1000;
         var aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None);
-        TestItem item = new TestItem();
+        var item = new TestItem();
 
         // Act
         var exception = await Record.ExceptionAsync(async () => await aggregator.SendAsync(item));
@@ -157,7 +158,7 @@ public class AggregatorTests
         var size = 1;
         var delay = 1000;
         var aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None);
-        TestItem item = new TestItem();
+        var item = new TestItem();
         await aggregator.SendAsync(item);
 
         // Act
