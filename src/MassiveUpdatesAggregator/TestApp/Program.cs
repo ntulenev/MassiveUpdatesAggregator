@@ -30,7 +30,7 @@ class Program
         var rnd = new Random();
 
         // Creation of the aggregator class
-        var aggregator = new Aggregator<TestData, int>(initialSize: 100, millisecondsDelay: 1000, new SumStrategy(), cts.Token);
+        var aggregator = new Aggregator<TestData, int>(initialSize: 100, delay: TimeSpan.FromSeconds(1), new SumStrategy(), cts.Token);
 
         bool isWork = true;
 

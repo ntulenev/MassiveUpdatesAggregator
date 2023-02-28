@@ -16,7 +16,7 @@ public class AggregatorTests
     {
         // Arrange
         var strategy = (new Mock<IAggregationStrategy<TestItem, object>>()).Object;
-        var delay = 1000;
+        var delay = TimeSpan.FromSeconds(1); ;
 
         // Act
         var exception = Record.Exception(() => new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None));
@@ -25,15 +25,14 @@ public class AggregatorTests
         exception.Should().NotBeNull().And.BeOfType<ArgumentException>();
     }
 
-    [Theory(DisplayName = "Aggregator can't be created with wrong delay.")]
-    [InlineData(0)]
-    [InlineData(-1)]
+    [Fact(DisplayName = "Aggregator can't be created with wrong delay.")]
     [Trait("Category", "Unit")]
-    public void CantCreateAggregatorWithWrongDelay(int delay)
+    public void CantCreateAggregatorWithWrongDelay()
     {
         // Arrange
         var strategy = (new Mock<IAggregationStrategy<TestItem, object>>()).Object;
         var size = 5;
+        var delay = TimeSpan.Zero;
 
         // Act
         var exception = Record.Exception(() => new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None));
@@ -50,7 +49,7 @@ public class AggregatorTests
         // Arrange
         IAggregationStrategy<TestItem, object> strategy = null!;
         var size = 5;
-        var delay = 1000;
+        var delay = TimeSpan.FromSeconds(1); 
 
         // Act
         var exception = Record.Exception(() => new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None));
@@ -66,7 +65,7 @@ public class AggregatorTests
         // Arrange
         var strategy = (new Mock<IAggregationStrategy<TestItem, object>>()).Object;
         var size = 5;
-        var delay = 1000;
+        var delay = TimeSpan.FromSeconds(1);
         Aggregator<TestItem, object> aggregator = null!;
 
         // Act
@@ -84,7 +83,7 @@ public class AggregatorTests
         // Arrange
         var strategy = (new Mock<IAggregationStrategy<TestItem, object>>()).Object;
         var size = 5;
-        var delay = 1000;
+        var delay = TimeSpan.FromSeconds(1);
         var aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None);
 
         // Act
@@ -102,7 +101,7 @@ public class AggregatorTests
         // Arrange
         var strategy = (new Mock<IAggregationStrategy<TestItem, object>>()).Object;
         var size = 5;
-        var delay = 1000;
+        var delay = TimeSpan.FromSeconds(1); ;
         var aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None);
         await aggregator.StopAsync().ConfigureAwait(false);
 
@@ -120,7 +119,7 @@ public class AggregatorTests
         // Arrange
         var strategy = (new Mock<IAggregationStrategy<TestItem, object>>()).Object;
         var size = 5;
-        var delay = 1000;
+        var delay = TimeSpan.FromSeconds(1);
         var aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None);
         TestItem item = null!;
 
@@ -138,7 +137,7 @@ public class AggregatorTests
         // Arrange
         var strategy = (new Mock<IAggregationStrategy<TestItem, object>>()).Object;
         var size = 1;
-        var delay = 1000;
+        var delay = TimeSpan.FromSeconds(1);
         var aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None);
         var item = new TestItem();
 
@@ -156,7 +155,7 @@ public class AggregatorTests
         // Arrange
         var strategy = (new Mock<IAggregationStrategy<TestItem, object>>()).Object;
         var size = 1;
-        var delay = 1000;
+        var delay = TimeSpan.FromSeconds(1);
         var aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None);
         var item = new TestItem();
         await aggregator.SendAsync(item);
@@ -182,7 +181,7 @@ public class AggregatorTests
         aggregatorMock.Setup(x => x.Merge(It.Is<IEnumerable<TestItem>>(coll => coll.Single() == item))).Returns(resultItem);
 
         var size = 1;
-        var delay = 1000;
+        var delay = TimeSpan.FromSeconds(1);
         var aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None);
 
         await aggregator.SendAsync(item);
@@ -214,7 +213,7 @@ public class AggregatorTests
         aggregatorMock.Setup(x => x.Merge(It.Is<IEnumerable<TestItem>>(coll => coll.Count() == 2 && coll.First() == item1 && coll.Last() == item2))).Returns(resultItem);
 
         var size = 1;
-        var delay = 1000;
+        var delay = TimeSpan.FromSeconds(1);
         var aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None);
 
         await aggregator.SendAsync(item1);
@@ -248,7 +247,7 @@ public class AggregatorTests
         aggregatorMock.Setup(x => x.Merge(It.Is<IEnumerable<TestItem>>(coll => coll.Single() == item1))).Returns(resultItem);
 
         var size = 1;
-        var delay = 1000;
+        var delay = TimeSpan.FromSeconds(1);
         var aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None);
 
         await aggregator.SendAsync(item1);
