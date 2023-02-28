@@ -1,7 +1,19 @@
 # MassiveUpdatesAggregator
 Allowsеs to group incoming messages by key and returns aggregations by timer.
 
-![Diagram](diagram.PNG)
+```mermaid
+sequenceDiagram
+    participant Input
+    participant Aggregator
+    participant Result
+    Input->>Aggregator: sends {Key1, A}
+    Input->>Aggregator: sends {Key1, B}
+    Input->>Aggregator: sends {Key2, X}
+    Input->>Aggregator: sends {Key1, C}
+    Aggregator->>Result: sends after ... seconds {Key1, ABC}
+    Input->>Aggregator: sends {Key2, Y}
+    Aggregator->>Result: sends after ... seconds {Key2, XY}
+```
 
 ### Example
 
