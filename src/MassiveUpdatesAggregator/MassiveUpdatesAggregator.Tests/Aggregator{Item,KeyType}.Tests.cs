@@ -49,7 +49,7 @@ public class AggregatorTests
         // Arrange
         IAggregationStrategy<TestItem, object> strategy = null!;
         var size = 5;
-        var delay = TimeSpan.FromSeconds(1); 
+        var delay = TimeSpan.FromSeconds(1);
 
         // Act
         var exception = Record.Exception(() => new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None));
@@ -66,13 +66,11 @@ public class AggregatorTests
         var strategy = (new Mock<IAggregationStrategy<TestItem, object>>()).Object;
         var size = 5;
         var delay = TimeSpan.FromSeconds(1);
-        Aggregator<TestItem, object> aggregator = null!;
 
         // Act
-        var exception = Record.Exception(() => aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None));
+        var aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None);
 
         // Assert
-        exception.Should().BeNull();
         aggregator.IsRunning.Should().BeTrue();
     }
 
@@ -87,10 +85,9 @@ public class AggregatorTests
         var aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None);
 
         // Act
-        var exception = await Record.ExceptionAsync(async () => await aggregator.StopAsync().ConfigureAwait(false));
+        await aggregator.StopAsync().ConfigureAwait(false);
 
         // Assert
-        exception.Should().BeNull();
         aggregator.IsRunning.Should().BeFalse();
     }
 
