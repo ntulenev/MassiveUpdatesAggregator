@@ -3,7 +3,8 @@
 /// <summary>
 /// Interface that presents logic for aggregation strategy.
 /// </summary>
-public interface IAggregationStrategy<Item, KeyType> where Item : IAggregatorItem<KeyType>
+public interface IAggregationStrategy<Item, KeyType> 
+                 where Item : IAggregatorItem<KeyType>
 {
     /// <summary>
     /// Merges aggregates items in single.

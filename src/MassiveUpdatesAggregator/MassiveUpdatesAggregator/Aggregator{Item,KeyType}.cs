@@ -9,8 +9,10 @@ namespace MassiveUpdatesAggregator;
 /// </summary>
 /// <typeparam name="Item">Type of the item.</typeparam>
 /// <typeparam name="KeyType">Type of the item key.</typeparam>
-public class Aggregator<Item, KeyType> : IAsyncEnumerable<Item> where Item : IAggregatorItem<KeyType>
-                                                                where KeyType : notnull
+public class Aggregator<Item, KeyType> : 
+            IAsyncEnumerable<Item> 
+            where Item : IAggregatorItem<KeyType>
+            where KeyType : notnull
 {
     /// <summary>
     /// Creates aggregator
@@ -20,8 +22,12 @@ public class Aggregator<Item, KeyType> : IAsyncEnumerable<Item> where Item : IAg
     /// <param name="strategy">Aggregation strategy <see cref="IAggregationStrategy"/>.</param>
     /// <param name="ct">Cancellation token for async operations.</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="strategy"/> is null.</exception>
-    /// <exception cref="ArgumentException">Thrown when <paramref name="initialSize"/> or <paramref name="millisecondsDelay"/> is incorrect.</exception>
-    public Aggregator(int initialSize, TimeSpan delay, IAggregationStrategy<Item, KeyType> strategy, CancellationToken ct = default)
+    /// <exception cref="ArgumentException">Thrown when <paramref name="initialSize"/> 
+    /// or <paramref name="millisecondsDelay"/> is incorrect.</exception>
+    public Aggregator(int initialSize, 
+                      TimeSpan delay, 
+                      IAggregationStrategy<Item, KeyType> strategy, 
+                      CancellationToken ct = default)
     {
         if (initialSize <= 0)
         {
@@ -51,7 +57,8 @@ public class Aggregator<Item, KeyType> : IAsyncEnumerable<Item> where Item : IAg
     /// <summary>
     /// Add <typeparamref name="Item"/> in aggregator.
     /// </summary>
-    /// <exception cref="ArgumentNullException">Thrown when <typeparamref name="Item"/> is null.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when 
+    /// <typeparamref name="Item"/> is null.</exception>
     public async Task SendAsync(Item item)
     {
         ArgumentNullException.ThrowIfNull(item);
@@ -125,7 +132,8 @@ public class Aggregator<Item, KeyType> : IAsyncEnumerable<Item> where Item : IAg
         {
             if (!_items.TryGetValue(key, out list))
             {
-                throw new InvalidOperationException($"List with data for key {key} not found");
+                throw new InvalidOperationException(
+                        $"List with data for key {key} not found");
             }
 
             _items.Remove(key);
