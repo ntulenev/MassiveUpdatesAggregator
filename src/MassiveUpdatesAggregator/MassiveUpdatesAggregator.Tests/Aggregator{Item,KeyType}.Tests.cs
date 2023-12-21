@@ -85,7 +85,7 @@ public class AggregatorTests
         var aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None);
 
         // Act
-        await aggregator.StopAsync().ConfigureAwait(false);
+        await aggregator.StopAsync();
 
         // Assert
         aggregator.IsRunning.Should().BeFalse();
@@ -100,10 +100,10 @@ public class AggregatorTests
         var size = 5;
         var delay = TimeSpan.FromSeconds(1); ;
         var aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None);
-        await aggregator.StopAsync().ConfigureAwait(false);
+        await aggregator.StopAsync();
 
         // Act
-        var exception = await Record.ExceptionAsync(async () => await aggregator.StopAsync().ConfigureAwait(false));
+        var exception = await Record.ExceptionAsync(async () => await aggregator.StopAsync());
 
         // Assert
         exception.Should().NotBeNull().And.BeOfType<InvalidOperationException>();
@@ -188,7 +188,7 @@ public class AggregatorTests
         var isItemReadyTask = enumerator.MoveNextAsync();
 
         // Assert
-        await Task.Delay(2000).ConfigureAwait(false); //Attemts to wait aggregator timeout
+        await Task.Delay(2000); //Attemts to wait aggregator timeout
         isItemReadyTask.IsCompleted.Should().BeTrue();
         var res = await isItemReadyTask;
         res.Should().BeTrue();
@@ -214,7 +214,7 @@ public class AggregatorTests
         var aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None);
 
         await aggregator.SendAsync(item1);
-        await Task.Delay(100).ConfigureAwait(false); //Attemts to emulate some delay between messages less then aggregator delay
+        await Task.Delay(100); //Attemts to emulate some delay between messages less then aggregator delay
         await aggregator.SendAsync(item2);
 
         // Act
@@ -222,7 +222,7 @@ public class AggregatorTests
         var isItemReadyTask = enumerator.MoveNextAsync();
 
         // Assert
-        await Task.Delay(2000).ConfigureAwait(false); //Attemts to wait aggregator timeout
+        await Task.Delay(2000); //Attemts to wait aggregator timeout
         isItemReadyTask.IsCompleted.Should().BeTrue();
         var res = await isItemReadyTask;
         res.Should().BeTrue();
@@ -248,7 +248,7 @@ public class AggregatorTests
         var aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None);
 
         await aggregator.SendAsync(item1);
-        await Task.Delay(2000).ConfigureAwait(false); //Attemts to emulate long delay between messages more then aggregator delay
+        await Task.Delay(2000); //Attemts to emulate long delay between messages more then aggregator delay
         await aggregator.SendAsync(item2);
 
         // Act
