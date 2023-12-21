@@ -19,7 +19,12 @@ public class AggregatorTests
         var delay = TimeSpan.FromSeconds(1); ;
 
         // Act
-        var exception = Record.Exception(() => new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None));
+        var exception = Record.Exception(() => 
+                        new Aggregator<TestItem, object>(
+                                                size, 
+                                                delay, 
+                                                strategy, 
+                                                CancellationToken.None));
 
         // Assert
         exception.Should().NotBeNull().And.BeOfType<ArgumentException>();
@@ -35,7 +40,12 @@ public class AggregatorTests
         var delay = TimeSpan.Zero;
 
         // Act
-        var exception = Record.Exception(() => new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None));
+        var exception = Record.Exception(() => 
+                        new Aggregator<TestItem, object>(
+                                                 size, 
+                                                 delay, 
+                                                 strategy, 
+                                                 CancellationToken.None));
 
         // Assert
         exception.Should().NotBeNull().And.BeOfType<ArgumentException>();
@@ -52,7 +62,12 @@ public class AggregatorTests
         var delay = TimeSpan.FromSeconds(1);
 
         // Act
-        var exception = Record.Exception(() => new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None));
+        var exception = Record.Exception(() => 
+                        new Aggregator<TestItem, object>(
+                                                 size, 
+                                                 delay, 
+                                                 strategy, 
+                                                 CancellationToken.None));
 
         // Assert
         exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
@@ -68,7 +83,11 @@ public class AggregatorTests
         var delay = TimeSpan.FromSeconds(1);
 
         // Act
-        var aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None);
+        var aggregator = new Aggregator<TestItem, object>(
+                                                  size, 
+                                                  delay, 
+                                                  strategy, 
+                                                  CancellationToken.None);
 
         // Assert
         aggregator.IsRunning.Should().BeTrue();
@@ -82,7 +101,11 @@ public class AggregatorTests
         var strategy = (new Mock<IAggregationStrategy<TestItem, object>>()).Object;
         var size = 5;
         var delay = TimeSpan.FromSeconds(1);
-        var aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None);
+        var aggregator = new Aggregator<TestItem, object>(
+                                                  size, 
+                                                  delay, 
+                                                  strategy, 
+                                                  CancellationToken.None);
 
         // Act
         await aggregator.StopAsync();
@@ -99,11 +122,16 @@ public class AggregatorTests
         var strategy = (new Mock<IAggregationStrategy<TestItem, object>>()).Object;
         var size = 5;
         var delay = TimeSpan.FromSeconds(1); ;
-        var aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None);
+        var aggregator = new Aggregator<TestItem, object>(
+                                                  size, 
+                                                  delay, 
+                                                  strategy, 
+                                                  CancellationToken.None);
         await aggregator.StopAsync();
 
         // Act
-        var exception = await Record.ExceptionAsync(async () => await aggregator.StopAsync());
+        var exception = await Record.ExceptionAsync(
+                                        () => aggregator.StopAsync());
 
         // Assert
         exception.Should().NotBeNull().And.BeOfType<InvalidOperationException>();
@@ -117,11 +145,16 @@ public class AggregatorTests
         var strategy = (new Mock<IAggregationStrategy<TestItem, object>>()).Object;
         var size = 5;
         var delay = TimeSpan.FromSeconds(1);
-        var aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None);
+        var aggregator = new Aggregator<TestItem, object>(
+                                                  size, 
+                                                  delay, 
+                                                  strategy, 
+                                                  CancellationToken.None);
         TestItem item = null!;
 
         // Act
-        var exception = await Record.ExceptionAsync(async () => await aggregator.SendAsync(item));
+        var exception = await Record.ExceptionAsync(
+                                        async () => await aggregator.SendAsync(item));
 
         // Assert
         exception.Should().NotBeNull().And.BeOfType<ArgumentNullException>();
@@ -135,11 +168,16 @@ public class AggregatorTests
         var strategy = (new Mock<IAggregationStrategy<TestItem, object>>()).Object;
         var size = 1;
         var delay = TimeSpan.FromSeconds(1);
-        var aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None);
+        var aggregator = new Aggregator<TestItem, object>(
+                                                  size, 
+                                                  delay, 
+                                                  strategy, 
+                                                  CancellationToken.None);
         var item = new TestItem();
 
         // Act
-        var exception = await Record.ExceptionAsync(async () => await aggregator.SendAsync(item));
+        var exception = await Record.ExceptionAsync(
+                                        async () => await aggregator.SendAsync(item));
 
         // Assert
         exception.Should().BeNull();
@@ -153,7 +191,11 @@ public class AggregatorTests
         var strategy = (new Mock<IAggregationStrategy<TestItem, object>>()).Object;
         var size = 1;
         var delay = TimeSpan.FromSeconds(1);
-        var aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None);
+        var aggregator = new Aggregator<TestItem, object>(
+                                                  size, 
+                                                  delay, 
+                                                  strategy, 
+                                                  CancellationToken.None);
         var item = new TestItem();
         await aggregator.SendAsync(item);
 
@@ -175,11 +217,18 @@ public class AggregatorTests
         var aggregatorMock = (new Mock<IAggregationStrategy<TestItem, object>>());
         var strategy = aggregatorMock.Object;
 
-        aggregatorMock.Setup(x => x.Merge(It.Is<IEnumerable<TestItem>>(coll => coll.Single() == item))).Returns(resultItem);
+        aggregatorMock.Setup(x => x.Merge(
+                                       It.Is<IEnumerable<TestItem>>(
+                                           coll => coll.Single() == item)))
+                       .Returns(resultItem);
 
         var size = 1;
         var delay = TimeSpan.FromSeconds(1);
-        var aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None);
+        var aggregator = new Aggregator<TestItem, object>(
+                                                  size, 
+                                                  delay, 
+                                                  strategy, 
+                                                  CancellationToken.None);
 
         await aggregator.SendAsync(item);
 
@@ -207,14 +256,23 @@ public class AggregatorTests
         var aggregatorMock = (new Mock<IAggregationStrategy<TestItem, object>>());
         var strategy = aggregatorMock.Object;
 
-        aggregatorMock.Setup(x => x.Merge(It.Is<IEnumerable<TestItem>>(coll => coll.Count() == 2 && coll.First() == item1 && coll.Last() == item2))).Returns(resultItem);
+        aggregatorMock.Setup(x => x.Merge(
+                                      It.Is<IEnumerable<TestItem>>(
+                                          coll => coll.Count() == 2 && coll.First() == item1 
+                                               && coll.Last() == item2)))
+                                   .Returns(resultItem);
 
         var size = 1;
         var delay = TimeSpan.FromSeconds(1);
-        var aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None);
+        var aggregator = new Aggregator<TestItem, object>(
+                                                  size, 
+                                                  delay, 
+                                                  strategy, 
+                                                  CancellationToken.None);
 
         await aggregator.SendAsync(item1);
-        await Task.Delay(100); //Attemts to emulate some delay between messages less then aggregator delay
+        await Task.Delay(100); //Attemts to emulate some delay between
+                               //messages less then aggregator delay
         await aggregator.SendAsync(item2);
 
         // Act
@@ -241,14 +299,22 @@ public class AggregatorTests
         var aggregatorMock = (new Mock<IAggregationStrategy<TestItem, object>>());
         var strategy = aggregatorMock.Object;
 
-        aggregatorMock.Setup(x => x.Merge(It.Is<IEnumerable<TestItem>>(coll => coll.Single() == item1))).Returns(resultItem);
+        aggregatorMock.Setup(x => x.Merge(
+                                    It.Is<IEnumerable<TestItem>>(
+                                        coll => coll.Single() == item1)))
+                      .Returns(resultItem);
 
         var size = 1;
         var delay = TimeSpan.FromSeconds(1);
-        var aggregator = new Aggregator<TestItem, object>(size, delay, strategy, CancellationToken.None);
+        var aggregator = new Aggregator<TestItem, object>(
+                                    size, 
+                                    delay, 
+                                    strategy, 
+                                    CancellationToken.None);
 
         await aggregator.SendAsync(item1);
-        await Task.Delay(2000); //Attemts to emulate long delay between messages more then aggregator delay
+        await Task.Delay(2000); //Attemts to emulate long delay
+                                //between messages more then aggregator delay
         await aggregator.SendAsync(item2);
 
         // Act
