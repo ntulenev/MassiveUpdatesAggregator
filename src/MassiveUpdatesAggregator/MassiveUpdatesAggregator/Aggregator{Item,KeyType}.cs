@@ -9,8 +9,8 @@ namespace MassiveUpdatesAggregator;
 /// </summary>
 /// <typeparam name="Item">Type of the item.</typeparam>
 /// <typeparam name="KeyType">Type of the item key.</typeparam>
-public class Aggregator<Item, KeyType> : 
-            IAsyncEnumerable<Item> 
+public sealed class Aggregator<Item, KeyType> :
+            IAsyncEnumerable<Item>
             where Item : IAggregatorItem<KeyType>
             where KeyType : notnull
 {
@@ -24,9 +24,9 @@ public class Aggregator<Item, KeyType> :
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="strategy"/> is null.</exception>
     /// <exception cref="ArgumentException">Thrown when <paramref name="initialSize"/> 
     /// or <paramref name="millisecondsDelay"/> is incorrect.</exception>
-    public Aggregator(int initialSize, 
-                      TimeSpan delay, 
-                      IAggregationStrategy<Item, KeyType> strategy, 
+    public Aggregator(int initialSize,
+                      TimeSpan delay,
+                      IAggregationStrategy<Item, KeyType> strategy,
                       CancellationToken ct = default)
     {
         if (initialSize <= 0)

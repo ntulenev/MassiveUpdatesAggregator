@@ -64,12 +64,12 @@ Console.WriteLine("All done.");
 /// </summary>
 /// <param name="Key">Aggregation key.</param>
 /// <param name="Value">Aggregation value.</param>
-public record TestData(int Key, string Value) : IAggregatorItem<int>;
+public sealed record TestData(int Key, string Value) : IAggregatorItem<int>;
 
 /// <summary>
 /// This class implements aggregation strategy for bunch of data.
 /// </summary>
-public class SumStrategy : IAggregationStrategy<TestData, int>
+public sealed class SumStrategy : IAggregationStrategy<TestData, int>
 {
     public TestData Merge(IEnumerable<TestData> items)
     {

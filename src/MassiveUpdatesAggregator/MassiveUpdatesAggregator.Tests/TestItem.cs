@@ -3,7 +3,7 @@
 /// <summary>
 /// Test object to for aggretation tests.
 /// </summary>
-public record TestItem : IAggregatorItem<object>
+public sealed record TestItem : IAggregatorItem<object>
 {
     /// <summary>
     /// Aggregation key.
