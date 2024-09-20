@@ -162,7 +162,7 @@ public class AggregatorTests
 
     [Fact(DisplayName = "Aggregator could send message.")]
     [Trait("Category", "Unit")]
-    public async Task MessageCouldBeSended()
+    public async Task MessageCouldBeSend()
     {
         // Arrange
         var strategy = (new Mock<IAggregationStrategy<TestItem, object>>()).Object;
@@ -237,7 +237,7 @@ public class AggregatorTests
         var isItemReadyTask = enumerator.MoveNextAsync();
 
         // Assert
-        await Task.Delay(2000); //Attemts to wait aggregator timeout
+        await Task.Delay(2000); //Attempts to wait aggregator timeout
         isItemReadyTask.IsCompleted.Should().BeTrue();
         var res = await isItemReadyTask;
         res.Should().BeTrue();
@@ -271,7 +271,7 @@ public class AggregatorTests
                                                   CancellationToken.None);
 
         await aggregator.SendAsync(item1);
-        await Task.Delay(100); //Attemts to emulate some delay between
+        await Task.Delay(100); //Attempts to emulate some delay between
                                //messages less then aggregator delay
         await aggregator.SendAsync(item2);
 
@@ -280,7 +280,7 @@ public class AggregatorTests
         var isItemReadyTask = enumerator.MoveNextAsync();
 
         // Assert
-        await Task.Delay(2000); //Attemts to wait aggregator timeout
+        await Task.Delay(2000); //Attempts to wait aggregator timeout
         isItemReadyTask.IsCompleted.Should().BeTrue();
         var res = await isItemReadyTask;
         res.Should().BeTrue();
@@ -313,7 +313,7 @@ public class AggregatorTests
                                     CancellationToken.None);
 
         await aggregator.SendAsync(item1);
-        await Task.Delay(2000); //Attemts to emulate long delay
+        await Task.Delay(2000); //Attempts to emulate long delay
                                 //between messages more then aggregator delay
         await aggregator.SendAsync(item2);
 

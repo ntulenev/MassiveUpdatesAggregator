@@ -1,7 +1,7 @@
 ﻿namespace MassiveUpdatesAggregator.Tests;
 
 /// <summary>
-/// Test object to for aggretation tests.
+/// Test object to for aggregation tests.
 /// </summary>
 public sealed record TestItem : IAggregatorItem<object>
 {
