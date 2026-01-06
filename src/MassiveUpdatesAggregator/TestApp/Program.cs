@@ -1,4 +1,4 @@
-﻿using MassiveUpdatesAggregator;
+using MassiveUpdatesAggregator;
 
 var testData = "The quick brown fox jumps over the lazy dog".Split(" ");
 
@@ -12,20 +12,23 @@ var aggregator = new Aggregator<TestData, int>(
                             new SumStrategy(),
                             cts.Token);
 
-bool isWork = true;
+var isWork = true;
 
-int i = 0;
+var i = 0;
 
 _ = Task.Run(async () =>
         {
             while (isWork)
             {
-                await Task.Delay(100 * rnd.Next(1, 7));
+#pragma warning disable CA5394 // Do not use insecure randomness
+                await Task.Delay(100 * rnd.Next(1, 7)).ConfigureAwait(false);
+#pragma warning restore CA5394 // Do not use insecure randomness
 
                 // Send data for key = 1  
                 await aggregator.SendAsync(new TestData(
                                                    Key: 1,
-                                                   Value: testData[i++]));
+                                                   Value: testData[i++]))
+                                .ConfigureAwait(false);
 
                 if (i == testData.Length)
                 {
@@ -44,13 +47,13 @@ _ = Task.Run(async () =>
 });
 
 Console.ReadKey();
-cts.Cancel();
+await cts.CancelAsync().ConfigureAwait(false);
 isWork = false;
 
 try
 {
     // Stop aggregator
-    await aggregator.StopAsync();
+    await aggregator.StopAsync().ConfigureAwait(false);
 }
 catch (TaskCanceledException)
 {
@@ -64,12 +67,12 @@ Console.WriteLine("All done.");
 /// </summary>
 /// <param name="Key">Aggregation key.</param>
 /// <param name="Value">Aggregation value.</param>
-public sealed record TestData(int Key, string Value) : IAggregatorItem<int>;
+internal sealed record TestData(int Key, string Value) : IAggregatorItem<int>;
 
 /// <summary>
 /// This class implements aggregation strategy for bunch of data.
 /// </summary>
-public sealed class SumStrategy : IAggregationStrategy<TestData, int>
+internal sealed class SumStrategy : IAggregationStrategy<TestData, int>
 {
     public TestData Merge(IEnumerable<TestData> items)
     {
