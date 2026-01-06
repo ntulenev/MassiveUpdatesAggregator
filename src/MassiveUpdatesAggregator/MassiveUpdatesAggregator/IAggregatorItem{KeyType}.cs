@@ -1,13 +1,13 @@
-﻿namespace MassiveUpdatesAggregator;
+namespace MassiveUpdatesAggregator;
 
 /// <summary>
 /// Interface that should be implemented 
 /// for data items to use aggregator.
 /// </summary>
-public interface IAggregatorItem<KeyType>
+public interface IAggregatorItem<TKeyType>
 {
     /// <summary>
     /// Aggregation key.
     /// </summary>
-    public KeyType Key { get; }
+    TKeyType Key { get; }
 }
